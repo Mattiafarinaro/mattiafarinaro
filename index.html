@@ -318,30 +318,36 @@ const BASE = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?single=tr
 
 // ─── CSV PARSER ───────────────────────────────────────────────────────────────
 function parseCSV(text) {
+  // Gestisce celle multiriga RFC 4180 (Google Sheets con Alt+Invio)
+  const raw = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const cells = [];
+  let cur = '', inQ = false, i = 0;
+  while (i < raw.length) {
+    const c = raw[i];
+    if (c === '"') {
+      if (inQ && raw[i+1] === '"') { cur += '"'; i += 2; continue; }
+      inQ = !inQ; i++; continue;
+    }
+    if (c === ',' && !inQ) { cells.push(cur); cur = ''; i++; continue; }
+    if (c === '\n' && !inQ) { cells.push(cur); cells.push('\n'); cur = ''; i++; continue; }
+    cur += c; i++;
+  }
+  cells.push(cur);
+  const allRows = [[]];
+  cells.forEach(cell => {
+    if (cell === '\n') allRows.push([]);
+    else allRows[allRows.length - 1].push(cell);
+  });
+  const headers = allRows[0].map(h => h.trim());
   const rows = [];
-  const lines = text.trim().split('\n');
-  const headers = splitCSVRow(lines[0]);
-  for (let i = 1; i < lines.length; i++) {
-    const vals = splitCSVRow(lines[i]);
-    if (vals.every(v => !v.trim())) continue;
+  for (let r = 1; r < allRows.length; r++) {
+    const vals = allRows[r];
+    if (!vals.length || vals.every(v => !v.trim())) continue;
     const obj = {};
-    headers.forEach((h, idx) => { obj[h.trim()] = (vals[idx] || '').trim(); });
+    headers.forEach((h, idx) => { obj[h] = (vals[idx] || '').trim(); });
     rows.push(obj);
   }
   return rows;
-}
-
-function splitCSVRow(line) {
-  const result = [];
-  let cur = '', inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
-    if (c === '"') { inQ = !inQ; }
-    else if (c === ',' && !inQ) { result.push(cur); cur = ''; }
-    else { cur += c; }
-  }
-  result.push(cur);
-  return result;
 }
 
 async function fetchSheet(gid) {
@@ -397,12 +403,13 @@ function renderProfilo(rows) {
   if (d.indirizzo) document.getElementById('card-sede').innerHTML = d.indirizzo.replace(/,\s*/g, '<br>');
 
   if (d.bio_completa) {
-    const paras = d.bio_completa.split(/\n+/).filter(Boolean);
+    // Supporta sia \n (Alt+Invio in Sheets) che testo unico
+    const paras = d.bio_completa.split(/\n+/).filter(p => p.trim());
     document.getElementById('about-body').innerHTML = paras.map(p => `<p>${p}</p>`).join('');
   }
-  if (d.bio_headline) {
-    document.getElementById('about-headline').innerHTML = d.bio_headline;
-  }
+  // bio_headline: usa la colonna del foglio se presente, altrimenti testo di default
+  const headline = d.bio_headline || 'Radici nel territorio, sguardo sui giovani e sulla cultura.';
+  document.getElementById('about-headline').innerHTML = headline;
 }
 
 function renderContatti(rows) {
