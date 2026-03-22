@@ -83,6 +83,9 @@
   .about-body { font-size: 1rem; font-weight: 300; color: var(--ink-muted); line-height: 1.8; }
   .about-body p + p { margin-top: 1rem; }
   .about-sidebar { display: flex; flex-direction: column; gap: 2rem; padding-top: 0.5rem; }
+  .about-photo-wrap { width: 100%; aspect-ratio: 3/4; overflow: hidden; border-radius: 2px; margin-bottom: 0.5rem; }
+  .about-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(15%); transition: filter 0.4s; }
+  .about-photo:hover { filter: grayscale(0%); }
   .about-fact { padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
   .about-fact:last-child { border-bottom: none; padding-bottom: 0; }
   .about-fact-num { font-family: var(--serif); font-size: 2.4rem; line-height: 1; color: var(--ink); margin-bottom: 0.3rem; }
@@ -146,14 +149,20 @@
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; min-height: auto; }
     .hero-right { display: none; }
-    .hero-left { padding: 4rem 1.5rem 3rem; }
+    .hero-left { padding: 5rem 1.5rem 3rem; }
     .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .role-grid { grid-template-columns: 1fr; }
+    .role-grid { grid-template-columns: 1fr 1fr; }
     .blog-grid { grid-template-columns: 1fr; }
     nav { padding: 1rem 1.5rem; }
-    .nav-links { gap: 1.25rem; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
     section { padding: 4rem 1.5rem; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .about-photo-wrap { order: -1; }
+  }
+  @media (max-width: 500px) {
+    .role-grid { grid-template-columns: 1fr; }
+    .hero-left { padding: 4.5rem 1.25rem 2.5rem; }
   }
 
   /* ANIMATIONS */
@@ -176,7 +185,18 @@
     <li><a href="#blog">Pensieri</a></li>
     <li><a href="#contatti">Contatti</a></li>
   </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="nav-mobile" id="nav-mobile">
+  <a href="#about"    onclick="closeMenu()">Chi sono</a>
+  <a href="#ruolo"    onclick="closeMenu()">Ruolo</a>
+  <a href="#blog"     onclick="closeMenu()">Pensieri</a>
+  <a href="#contatti" onclick="closeMenu()">Contatti</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="home">
@@ -229,6 +249,13 @@
         </div>
       </div>
       <div class="about-sidebar">
+        <div class="about-photo-wrap">
+          <img
+            src="https://lh3.googleusercontent.com/sitesv/APaQ0SRRBCWefs2Njq445Zz-cRXip9Q1UqhG9WNuViM28bCWuJdOd9GQ8E_4yj03lr6ZwV_Jl_bzg4jfUu5wy6BOCgVCkmuWnPViN65pYtVffPe9hOtw-xouDwgbfbarysA4OlLILiiR11si3y12qDwv6bD0bOO7PtEXtlSNpaPc4Ckaf2RK9tN2H5LOMuJBiAvv73nzcYD-TkPDw3eUGREVYs74CHDLjIKiuuCa=w1280"
+            alt="Mattia Farinaro"
+            class="about-photo"
+          >
+        </div>
         <div class="about-fact">
           <p class="about-fact-num">PAT</p>
           <p class="about-fact-label">Provincia Autonoma di Trento</p>
