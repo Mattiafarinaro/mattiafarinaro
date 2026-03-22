@@ -62,9 +62,9 @@
   .hero-cta .arrow { transition: transform 0.2s; }
   .hero-cta:hover .arrow { transform: translateX(4px); }
   .hero-right { display: flex; align-items: stretch; position: relative; overflow: hidden; }
-  .hero-right-inner { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding: 4rem 2.5rem 4rem 3rem; background: var(--ink); color: #fff; }
+  .hero-right-inner { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; padding: 3rem 2.5rem 3rem 3rem; background: var(--ink); color: #fff; gap: 0; }
   .hero-card-label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 0.75rem; }
-  .hero-card-role { font-family: var(--serif); font-size: 1.6rem; line-height: 1.25; color: #fff; margin-bottom: 2.5rem; }
+  .hero-card-role { font-family: var(--serif); font-size: 1.5rem; line-height: 1.25; color: #fff; margin-bottom: 2rem; }
   .hero-card-details { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
   .hero-card-detail-label { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.3rem; }
   .hero-card-detail-val { font-size: 0.88rem; color: rgba(255,255,255,0.85); font-weight: 300; }
@@ -83,9 +83,8 @@
   .about-body { font-size: 1rem; font-weight: 300; color: var(--ink-muted); line-height: 1.8; }
   .about-body p + p { margin-top: 1rem; }
   .about-sidebar { display: flex; flex-direction: column; gap: 2rem; padding-top: 0.5rem; }
-  .about-photo-wrap { width: 100%; aspect-ratio: 3/4; overflow: hidden; border-radius: 2px; margin-bottom: 0.5rem; }
-  .about-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(15%); transition: filter 0.4s; }
-  .about-photo:hover { filter: grayscale(0%); }
+  .hero-photo-wrap { width: 100%; aspect-ratio: 1/1; overflow: hidden; margin-bottom: 2rem; flex-shrink: 0; }
+  .hero-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(100%) brightness(0.85) contrast(1.1); }
   .about-fact { padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
   .about-fact:last-child { border-bottom: none; padding-bottom: 0; }
   .about-fact-num { font-family: var(--serif); font-size: 2.4rem; line-height: 1; color: var(--ink); margin-bottom: 0.3rem; }
@@ -158,7 +157,7 @@
     .nav-hamburger { display: flex; }
     section { padding: 4rem 1.5rem; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
-    .about-photo-wrap { order: -1; }
+
   }
   @media (max-width: 500px) {
     .role-grid { grid-template-columns: 1fr; }
@@ -212,6 +211,9 @@
   </div>
   <div class="hero-right">
     <div class="hero-right-inner">
+      <div class="hero-photo-wrap">
+        <img src="./foto.jpg" alt="Mattia Farinaro" class="hero-photo">
+      </div>
       <p class="hero-card-label">Posizione attuale</p>
       <p class="hero-card-role" id="card-ruolo">Responsabile ufficio di gabinetto<br>Provincia Autonoma di Trento</p>
       <div class="hero-card-details">
