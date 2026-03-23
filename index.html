@@ -135,7 +135,7 @@
   .modal-close:hover { color: var(--ink); }
   .modal-meta { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1rem; }
   .modal-title { font-family: var(--serif); font-size: 2rem; line-height: 1.2; color: var(--ink); margin-bottom: 1.5rem; }
-  .modal-body { font-size: 1rem; font-weight: 300; color: var(--ink-muted); line-height: 1.85; }
+  .modal-body { font-size: 1rem; font-weight: 300; color: var(--ink-muted); line-height: 1.85; text-align: justify; hyphens: auto; }
   .modal-body p + p { margin-top: 1rem; }
   .modal-body a { color: var(--ink); border-bottom: 1px solid var(--border); text-decoration: none; transition: border-color 0.2s; }
   .modal-body a:hover { border-color: var(--ink); }
@@ -211,7 +211,7 @@
   <ul class="nav-links">
     <li><a href="#about">Chi sono</a></li>
     <li><a href="#ruolo">Ruolo</a></li>
-    <li><a href="#blog">Pensieri</a></li>
+    <li><a href="pensieri.html">Pensieri</a></li>
     <li><a href="#contatti">Contatti</a></li>
   </ul>
   <button class="nav-hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
@@ -223,7 +223,7 @@
 <div class="nav-mobile" id="nav-mobile">
   <a href="#about"    onclick="closeMenu()">Chi sono</a>
   <a href="#ruolo"    onclick="closeMenu()">Ruolo</a>
-  <a href="#blog"     onclick="closeMenu()">Pensieri</a>
+  <a href="pensieri.html" onclick="closeMenu()">Pensieri</a>
   <a href="#contatti" onclick="closeMenu()">Contatti</a>
 </div>
 
@@ -549,7 +549,8 @@ function renderBlog(rows) {
   }
 
   grid.innerHTML = '';
-  blogData.forEach((r, i) => {
+  const latest = blogData.slice(0, 2);
+  latest.forEach((r, i) => {
     const hasFull = r.testo_completo && r.testo_completo.trim().length > 0;
     const fotoKey = Object.keys(r).find(k => k.toLowerCase().includes('foto')) || 'foto';
     const fotoUrl = r[fotoKey] || '';
@@ -565,6 +566,11 @@ function renderBlog(rows) {
         </div>
       </div>`;
   });
+  if (blogData.length > 2) {
+    grid.innerHTML += `<div style="grid-column:1/-1;text-align:center;padding-top:1rem">
+      <a href="pensieri.html" style="font-size:0.85rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border-bottom:1.5px solid var(--ink);padding-bottom:0.2rem">Tutti gli articoli →</a>
+    </div>`;
+  }
 }
 
 function openModal(i) {
