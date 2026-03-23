@@ -72,11 +72,12 @@
   .hero-cta:hover { opacity: 0.5; }
   .hero-cta .arrow { transition: transform 0.2s; }
   .hero-cta:hover .arrow { transform: translateX(4px); }
-  .hero-right { display: flex; align-items: stretch; position: relative; overflow: hidden; }
-  .hero-right-inner { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; padding: 3rem 2.5rem 3rem 3rem; background: var(--ink); color: #fff; gap: 0; }
+  .hero-right { display: flex; align-items: stretch; position: relative; overflow: hidden; background: var(--ink); }
+  .hero-photo-col { width: 45%; flex-shrink: 0; overflow: hidden; }
+  .hero-right-inner { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 2.5rem 2rem 2.5rem 2rem; background: var(--ink); color: #fff; gap: 0; }
   .hero-card-label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 0.75rem; }
-  .hero-card-role { font-family: var(--serif); font-size: 1.5rem; line-height: 1.25; color: #fff; margin-bottom: 2rem; }
-  .hero-card-details { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .hero-card-role { font-family: var(--serif); font-size: 1.25rem; line-height: 1.2; color: #fff; margin-bottom: 1.5rem; }
+  .hero-card-details { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .hero-card-detail-label { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.3rem; }
   .hero-card-detail-val { font-size: 0.88rem; color: rgba(255,255,255,0.85); font-weight: 300; }
   .hero-card-detail-val a { color: rgba(255,255,255,0.85); text-decoration: none; }
@@ -94,8 +95,8 @@
   .about-body { font-size: 1rem; font-weight: 300; color: var(--ink-muted); line-height: 1.8; }
   .about-body p + p { margin-top: 1rem; }
   .about-sidebar { display: flex; flex-direction: column; gap: 2rem; padding-top: 0.5rem; }
-  .hero-photo-wrap { width: 160px; height: 160px; overflow: hidden; margin-bottom: 2rem; flex-shrink: 0; border-radius: 1px; }
-  .hero-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(100%) brightness(0.85) contrast(1.1); }
+  .hero-photo-wrap { width: 100%; height: 100%; overflow: hidden; margin-bottom: 0; flex-shrink: 0; border-radius: 0; }
+  .hero-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(100%) brightness(0.8) contrast(1.15); }
   .about-fact { padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
   .about-fact:last-child { border-bottom: none; padding-bottom: 0; }
   .about-fact-num { font-family: var(--serif); font-size: 2.4rem; line-height: 1; color: var(--ink); margin-bottom: 0.3rem; }
@@ -166,11 +167,12 @@
   /* RESPONSIVE */
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; min-height: auto; }
-    .hero-right { display: flex; }
-    .hero-right-inner { padding: 2.5rem 1.5rem; flex-direction: row; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; }
-    .hero-photo-wrap { width: 100px; height: 100px; margin-bottom: 0; flex-shrink: 0; }
-    .hero-card-role { font-size: 1.2rem; margin-bottom: 1rem; flex-basis: 100%; }
-    .hero-card-details { grid-template-columns: 1fr 1fr; gap: 1rem; flex-basis: 100%; }
+    .hero-right { display: flex; flex-direction: column; }
+    .hero-photo-col { width: 100%; height: 260px; }
+    .hero-photo-wrap { width: 100%; height: 100%; }
+    .hero-right-inner { padding: 2rem 1.5rem; }
+    .hero-card-role { font-size: 1.1rem; margin-bottom: 1rem; }
+    .hero-card-details { grid-template-columns: 1fr 1fr; gap: 1rem; }
     .hero-left { padding: 5rem 1.5rem 2rem; }
     .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
     .role-grid { grid-template-columns: 1fr 1fr; }
@@ -236,10 +238,12 @@
     </a>
   </div>
   <div class="hero-right">
-    <div class="hero-right-inner">
+    <div class="hero-photo-col">
       <div class="hero-photo-wrap">
         <img src="./foto.jpg" alt="Mattia Farinaro" class="hero-photo">
       </div>
+    </div>
+    <div class="hero-right-inner">
       <p class="hero-card-label">Posizione attuale</p>
       <p class="hero-card-role" id="card-ruolo">Responsabile ufficio di gabinetto<br>Provincia Autonoma di Trento</p>
       <div class="hero-card-details">
