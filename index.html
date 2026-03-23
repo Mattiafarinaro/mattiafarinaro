@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mattia Farinaro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/nav.css">
+<link rel="stylesheet" href="css/blog.css">
+<link rel="stylesheet" href="css/modal.css">
+<style>
+  /* ── HERO ── */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 64px; }
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 5rem 3rem 5rem 2.5rem; }
+  .hero-eyebrow { font-size: 0.78rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+  .hero-eyebrow::before { content: ''; display: inline-block; width: 2rem; height: 1px; background: var(--ink-muted); }
+  .hero-name { font-family: var(--serif); font-size: clamp(3.5rem, 6vw, 5.5rem); line-height: 1.0; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 2rem; }
+  .hero-name em { font-style: italic; color: var(--ink-muted); }
+  .hero-desc { font-size: 1.05rem; font-weight: 300; color: var(--ink-muted); max-width: 38ch; line-height: 1.75; margin-bottom: 3rem; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); text-decoration: none; border-bottom: 1.5px solid var(--ink); padding-bottom: 0.2rem; transition: opacity 0.2s; }
+  .hero-cta:hover { opacity: 0.5; }
+  .hero-cta:hover .arrow { transform: translateX(4px); }
+  .arrow { transition: transform 0.2s; display: inline-block; }
+  .hero-right { display: flex; align-items: center; justify-content: center; position: relative; padding: 3rem 0; background: transparent; }
+  .hero-right-card { display: flex; width: 90%; max-height: 520px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.18); }
+  .hero-photo-col { width: 45%; flex-shrink: 0; overflow: hidden; }
+  .hero-photo-wrap { width: 100%; height: 100%; overflow: hidden; }
+  .hero-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(100%) brightness(0.8) contrast(1.15); }
+  .hero-right-inner { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 2.5rem 2rem; background: var(--ink); color: #fff; }
+  .hero-card-label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 0.75rem; }
+  .hero-card-role { font-family: var(--serif); font-size: 1.25rem; line-height: 1.2; color: #fff; margin-bottom: 1.5rem; }
+  .hero-card-details { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .hero-card-detail-label { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.3rem; }
+  .hero-card-detail-val { font-size: 0.88rem; color: rgba(255,255,255,0.85); font-weight: 300; }
+  .hero-card-detail-val a { color: rgba(255,255,255,0.85); text-decoration: none; }
+
+  /* ── CHI SONO ── */
+  #about { background: var(--surface); }
+  .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: start; }
+  .about-headline { font-family: var(--serif); font-size: clamp(2rem, 3vw, 2.8rem); line-height: 1.2; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 1.75rem; }
+  .about-body { font-size: 1rem; font-weight: 300; color: var(--ink-muted); line-height: 1.8; }
+  .about-body p + p { margin-top: 1rem; }
+  .about-sidebar { display: flex; flex-direction: column; gap: 2rem; padding-top: 0.5rem; }
+  .about-fact { padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+  .about-fact:last-child { border-bottom: none; padding-bottom: 0; }
+  .about-fact-num { font-family: var(--serif); font-size: 2.4rem; line-height: 1; color: var(--ink); margin-bottom: 0.3rem; }
+  .about-fact-label { font-size: 0.82rem; font-weight: 300; color: var(--ink-muted); }
+
+  /* ── AREE DI LAVORO ── */
+  #ruolo { background: var(--bg); }
+  .role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--border); border: 1.5px solid var(--border); }
+  .role-cell { background: var(--surface); padding: 2.5rem 2rem; }
+  .role-cell-icon { width: 2rem; height: 2rem; margin-bottom: 1.25rem; opacity: 0.25; }
+  .role-cell-title { font-family: var(--serif); font-size: 1.15rem; color: var(--ink); margin-bottom: 0.6rem; }
+  .role-cell-body { font-size: 0.88rem; font-weight: 300; color: var(--ink-muted); line-height: 1.7; }
+
+  /* ── CONTATTI ── */
+  #contatti { background: var(--ink); color: #fff; }
+  #contatti .section-label { color: rgba(255,255,255,0.35); }
+  #contatti .section-label::after { background: rgba(255,255,255,0.1); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .contact-headline { font-family: var(--serif); font-size: clamp(2rem, 3vw, 3rem); line-height: 1.15; color: #fff; margin-bottom: 1.5rem; }
+  .contact-sub { font-size: 0.95rem; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.75; max-width: 38ch; }
+  .contact-list { list-style: none; display: flex; flex-direction: column; gap: 2rem; }
+  .contact-item-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 0.3rem; }
+  .contact-item-val { font-size: 1rem; color: rgba(255,255,255,0.85); font-weight: 300; }
+  .contact-item-val a { color: rgba(255,255,255,0.85); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); transition: border-color 0.2s; }
+  .contact-item-val a:hover { border-color: rgba(255,255,255,0.6); }
+  .social-row { margin-top: 3rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+  .social-btn { display: inline-flex; align-items: center; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.6); text-decoration: none; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.15); border-radius: 1px; transition: border-color 0.2s, color 0.2s; }
+  .social-btn:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+
+  /* ── HERO ANIMATIONS ── */
+  .hero-eyebrow  { animation: fadeUp 0.6s ease both; }
+  .hero-name     { animation: fadeUp 0.6s 0.1s ease both; }
+  .hero-desc     { animation: fadeUp 0.6s 0.2s ease both; }
+  .hero-cta      { animation: fadeUp 0.6s 0.3s ease both; }
+  .hero-right-inner { animation: fadeUp 0.7s 0.2s ease both; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 64px; }
+    .hero-left { padding: 5rem 1.5rem 2rem; }
+    .hero-right { padding: 1rem 1.5rem; }
+    .hero-right-card { width: 100%; max-height: none; flex-direction: column; }
+    .hero-photo-col { width: 100%; height: 220px; }
+    .hero-right-inner { padding: 1.5rem; }
+    .hero-card-role { font-size: 1.1rem; margin-bottom: 1rem; }
+    .hero-card-details { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .role-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 500px) {
+    .role-grid { grid-template-columns: 1fr; }
+    .hero-left { padding: 4.5rem 1.25rem 2rem; }
+    .hero-card-details { grid-template-columns: 1fr; }
+    .hero-photo-col { height: 200px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Mattia Farinaro</a>
+  <ul class="nav-links">
+    <li><a href="#about">Chi sono</a></li>
+    <li><a href="#ruolo">Ruolo</a></li>
+    <li><a href="pensieri.html">Pensieri</a></li>
+    <li><a href="#contatti">Contatti</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Apri menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-mobile" id="nav-mobile">
+  <a href="#about"        onclick="closeMenu()">Chi sono</a>
+  <a href="#ruolo"        onclick="closeMenu()">Ruolo</a>
+  <a href="pensieri.html" onclick="closeMenu()">Pensieri</a>
+  <a href="#contatti"     onclick="closeMenu()">Contatti</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-left">
+    <span class="hero-eyebrow" id="hero-citta">Trento, Italia</span>
+    <h1 class="hero-name">Mattia<br><em>Farinaro</em></h1>
+    <p class="hero-desc" id="hero-bio">Responsabile dell'ufficio di gabinetto dell'Assessorato all'Istruzione, Cultura, per i Giovani e per le Pari Opportunità della Provincia Autonoma di Trento.</p>
+    <a class="hero-cta" href="#contatti">Contattami <span class="arrow">→</span></a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-card">
+      <div class="hero-photo-col">
+        <div class="hero-photo-wrap">
+          <img src="foto.jpg" alt="Mattia Farinaro" class="hero-photo">
+        </div>
+      </div>
+      <div class="hero-right-inner">
+        <p class="hero-card-label">Posizione attuale</p>
+        <p class="hero-card-role" id="card-ruolo">Responsabile ufficio di gabinetto<br>Provincia Autonoma di Trento</p>
+        <div class="hero-card-details">
+          <div>
+            <p class="hero-card-detail-label">Assessorato</p>
+            <p class="hero-card-detail-val" id="card-assessorato">Istruzione, Cultura,<br>Giovani &amp; Pari Opportunità</p>
+          </div>
+          <div>
+            <p class="hero-card-detail-label">Sede</p>
+            <p class="hero-card-detail-val" id="card-sede">Via Vannetti, 32<br>38122 Trento</p>
+          </div>
+          <div>
+            <p class="hero-card-detail-label">Email istituzionale</p>
+            <p class="hero-card-detail-val"><a id="card-email" href="#">—</a></p>
+          </div>
+          <div>
+            <p class="hero-card-detail-label">Telefono</p>
+            <p class="hero-card-detail-val"><a id="card-tel" href="#">—</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHI SONO -->
+<section id="about">
+  <div class="section-inner">
+    <p class="section-label">Chi sono</p>
+    <div class="about-grid">
+      <div>
+        <h2 class="about-headline" id="about-headline">Radici nel territorio,<br>sguardo sui giovani e sulla cultura.</h2>
+        <div class="about-body" id="about-body">
+          <p>Lavoro al servizio delle istituzioni con un impegno costante verso le politiche educative, culturali e sociali del territorio trentino.</p>
+          <p>Credo nel valore della cultura come strumento di crescita collettiva, nella centralità dei giovani come protagonisti del futuro, e nell'importanza di costruire una società più equa e inclusiva attraverso politiche concrete e partecipate.</p>
+        </div>
+      </div>
+      <div class="about-sidebar">
+        <div class="about-fact">
+          <p class="about-fact-num">PAT</p>
+          <p class="about-fact-label">Provincia Autonoma di Trento</p>
+        </div>
+        <div class="about-fact">
+          <p class="about-fact-num">4</p>
+          <p class="about-fact-label">Ambiti: Istruzione, Cultura, Giovani, Pari Opportunità</p>
+        </div>
+        <div class="about-fact">
+          <p class="about-fact-num" id="fact-citta">Trento</p>
+          <p class="about-fact-label">Palazzo della Provincia Autonoma, Via Vannetti 32</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RUOLO -->
+<section id="ruolo">
+  <div class="section-inner">
+    <p class="section-label">Aree di lavoro</p>
+    <div class="role-grid" id="role-grid"></div>
+  </div>
+</section>
+
+<!-- PENSIERI (ultimi 2) -->
+<section id="blog" style="background: var(--surface);">
+  <div class="section-inner">
+    <p class="section-label">Pensieri</p>
+    <div class="blog-grid" id="blog-grid"></div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal(null, true)">×</button>
+    <img id="modal-img" class="modal-img" src="" alt="" style="display:none">
+    <div class="modal-inner">
+      <p class="modal-meta" id="modal-meta"></p>
+      <h2 class="modal-title" id="modal-title"></h2>
+      <hr class="modal-divider">
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTATTI -->
+<section id="contatti">
+  <div class="section-inner">
+    <p class="section-label">Contatti</p>
+    <div class="contact-grid">
+      <div>
+        <h2 class="contact-headline">Parliamo.</h2>
+        <p class="contact-sub">Puoi raggiungermi per questioni istituzionali, collaborazioni o semplicemente per un confronto.</p>
+        <div class="social-row" id="social-row"></div>
+      </div>
+      <ul class="contact-list" id="contact-list"></ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Mattia Farinaro</p>
+  <p>Trento, Provincia Autonoma di Trento</p>
+</footer>
+
+<!-- SCRIPTS (ordine importante: config → csv → utils → nav → modal → page logic) -->
+<script src="js/config.js"></script>
+<script src="js/csv.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/modal.js"></script>
+<script>
+// ── ICONE AREE DI LAVORO ──────────────────────────────────────────────────────
+const ICONS = {
+  default:       `<svg class="role-cell-icon" viewBox="0 0 32 32" fill="none"><rect x="4" y="6" width="24" height="20" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M4 12h24M10 18h12M10 22h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  istruzione:    `<svg class="role-cell-icon" viewBox="0 0 32 32" fill="none"><path d="M4 13l12-7 12 7-12 7-12-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 16.5V24c0 1.5 2.7 3 6 3s6-1.5 6-3v-7.5" stroke="currentColor" stroke-width="1.5"/></svg>`,
+  cultura:       `<svg class="role-cell-icon" viewBox="0 0 32 32" fill="none"><path d="M8 28V10M16 28V6M24 28V14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M5 28h22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  giovani:       `<svg class="role-cell-icon" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="11" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M6 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  pari:          `<svg class="role-cell-icon" viewBox="0 0 32 32" fill="none"><circle cx="11" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><circle cx="21" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M4 26c0-3.866 3.134-7 7-7h10c3.866 0 7 3.134 7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  coordinamento: `<svg class="role-cell-icon" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="10" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="18" y="4" width="10" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="4" y="18" width="10" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="18" y="18" width="10" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>`,
+  gabinetto:     `<svg class="role-cell-icon" viewBox="0 0 32 32" fill="none"><path d="M16 4L4 12v16h8v-8h8v8h8V12L16 4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>`,
+};
+
+function getIcon(titolo) {
+  const t = (titolo || '').toLowerCase();
+  if (t.includes('istruz'))                  return ICONS.istruzione;
+  if (t.includes('cultur'))                  return ICONS.cultura;
+  if (t.includes('giovan'))                  return ICONS.giovani;
+  if (t.includes('pari') || t.includes('opportun')) return ICONS.pari;
+  if (t.includes('coord'))                   return ICONS.coordinamento;
+  if (t.includes('gabinett') || t.includes('ufficio')) return ICONS.gabinetto;
+  return ICONS.default;
+}
+
+// ── SOCIAL LABELS ─────────────────────────────────────────────────────────────
+const SOCIAL_LABELS = {
+  linkedin_url:  'LinkedIn',
+  facebook_url:  'Facebook',
+  instagram_url: 'Instagram',
+  twitter_url:   'Twitter / X',
+};
+
+// ── RENDER PROFILO ────────────────────────────────────────────────────────────
+function renderProfilo(rows) {
+  if (!rows.length) return;
+  const d = rows[0];
+  if (d.citta) {
+    document.getElementById('hero-citta').textContent = d.citta;
+    document.getElementById('fact-citta').textContent = d.citta;
+  }
+  if (d.bio_breve)    document.getElementById('hero-bio').textContent = d.bio_breve;
+  if (d.ruolo)        document.getElementById('card-ruolo').innerHTML = d.ruolo.replace(/,\s*/g, '<br>');
+  if (d.assessorato)  document.getElementById('card-assessorato').innerHTML = d.assessorato.replace(/,\s*/g, '<br>');
+  if (d.indirizzo)    document.getElementById('card-sede').innerHTML = d.indirizzo.replace(/,\s*/g, '<br>');
+  if (d.bio_completa) {
+    const paras = d.bio_completa.split(/\n+/).filter(p => p.trim());
+    document.getElementById('about-body').innerHTML = paras.map(p => `<p>${p}</p>`).join('');
+  }
+  const hl = d.bio_headline || 'Radici nel territorio, sguardo sui giovani e sulla cultura.';
+  document.getElementById('about-headline').innerHTML = hl;
+}
+
+// ── RENDER CONTATTI ───────────────────────────────────────────────────────────
+function renderContatti(rows) {
+  if (!rows.length) return;
+  const d = rows[0];
+
+  const emailEl = document.getElementById('card-email');
+  if (d.email_personale) { emailEl.textContent = d.email_personale; emailEl.href = 'mailto:' + d.email_personale; }
+  const telEl = document.getElementById('card-tel');
+  if (d.telefono) { telEl.textContent = d.telefono; telEl.href = 'tel:' + d.telefono.replace(/\s/g, ''); }
+
+  const list = document.getElementById('contact-list');
+  list.innerHTML = '';
+  [
+    { key: 'email_personale',  label: 'Email personale',          type: 'email' },
+    { key: 'telefono',         label: 'Telefono',                 type: 'tel'   },
+    { key: 'indirizzo',        label: 'Ufficio',                  type: 'text'  },
+    { key: 'telefono_ufficio', label: 'Centralino assessorato',   type: 'tel'   },
+    { key: 'email_assessorato',label: 'Email assessorato',        type: 'email' },
+  ].forEach(f => {
+    const val = d[f.key]; if (!val) return;
+    let v = f.type === 'email' ? `<a href="mailto:${val}">${val}</a>`
+          : f.type === 'tel'   ? `<a href="tel:${val.replace(/\s/g,'')}">${val}</a>`
+          : val;
+    list.innerHTML += `<li><p class="contact-item-label">${f.label}</p><p class="contact-item-val">${v}</p></li>`;
+  });
+
+  const socialRow = document.getElementById('social-row');
+  socialRow.innerHTML = '';
+  Object.entries(SOCIAL_LABELS).forEach(([key, label]) => {
+    if (d[key]) socialRow.innerHTML += `<a class="social-btn" href="${d[key]}" target="_blank" rel="noopener">${label}</a>`;
+  });
+}
+
+// ── RENDER AREE ───────────────────────────────────────────────────────────────
+function renderAree(rows) {
+  const grid = document.getElementById('role-grid');
+  const visible = filterVisible(rows, 'visibile');
+  if (!visible.length) {
+    grid.innerHTML = '<div class="role-cell"><p class="role-cell-body" style="font-style:italic;color:var(--ink-faint)">Nessuna area configurata.</p></div>';
+    return;
+  }
+  grid.innerHTML = sortByOrder(visible).map(r => `
+    <div class="role-cell">
+      ${getIcon(r.titolo)}
+      <h3 class="role-cell-title">${r.titolo || ''}</h3>
+      <p class="role-cell-body">${r.descrizione || ''}${r.link ? `<br><a href="${r.link}" target="_blank" rel="noopener" style="color:var(--ink-muted);font-size:0.8rem">Approfondisci →</a>` : ''}</p>
+    </div>`).join('');
+}
+
+// ── RENDER BLOG (ultimi 2) ────────────────────────────────────────────────────
+let blogData = [];
+
+function renderBlog(rows) {
+  const grid = document.getElementById('blog-grid');
+  blogData = filterPublished(rows);
+
+  if (!blogData.length) {
+    grid.innerHTML = '<p class="blog-empty">Nessun articolo pubblicato. Torna presto!</p>';
+    return;
+  }
+
+  const latest = blogData.slice(0, 2);
+  grid.innerHTML = latest.map((r, i) => {
+    const hasFull = r.testo_completo && r.testo_completo.trim().length > 0;
+    const foto = getFoto(r);
+    const imgHtml = foto ? `<img class="blog-card-img" src="${foto}" alt="${r.titolo || ''}" onerror="this.style.display='none'">` : '';
+    return `
+      <div class="blog-card ${hasFull ? 'has-full' : ''}" ${hasFull ? `onclick="onBlogClick(${i})"` : ''}>
+        ${imgHtml}
+        <div class="blog-card-content">
+          <p class="blog-card-meta">${formatDate(r.data)}${r.categoria ? ' · ' + r.categoria : ''}</p>
+          <h3 class="blog-card-title">${r.titolo || ''}</h3>
+          <p class="blog-card-excerpt">${r.estratto || ''}</p>
+          ${hasFull ? '<p style="font-size:0.8rem;margin-top:1rem;color:var(--ink-faint)">Leggi tutto →</p>' : ''}
+        </div>
+      </div>`;
+  }).join('');
+
+  if (blogData.length > 2) {
+    grid.innerHTML += `
+      <div style="grid-column:1/-1;text-align:center;padding-top:1rem">
+        <a href="pensieri.html" style="font-size:0.85rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border-bottom:1.5px solid var(--ink);padding-bottom:0.2rem">
+          Tutti gli articoli →
+        </a>
+      </div>`;
+  }
+}
+
+function onBlogClick(i) {
+  openModal(blogData[i], getFoto(blogData[i]));
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function init() {
+  try {
+    const [contatti, blog, aree, profilo] = await Promise.allSettled([
+      fetchSheet('contatti'),
+      fetchSheet('blog'),
+      fetchSheet('aree'),
+      fetchSheet('profilo'),
+    ]);
+    if (profilo.status  === 'fulfilled') renderProfilo(profilo.value);
+    if (contatti.status === 'fulfilled') renderContatti(contatti.value);
+    if (aree.status     === 'fulfilled') renderAree(aree.value);
+    if (blog.status     === 'fulfilled') renderBlog(blog.value);
+  } catch(e) {
+    console.error('Errore caricamento dati:', e);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
