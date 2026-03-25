@@ -104,6 +104,11 @@
   .modal-title { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.2rem); line-height: 1.15; color: var(--ink); margin-bottom: 2rem; }
   .modal-body { font-size: 1rem; font-weight: 300; color: var(--ink-muted); line-height: 1.85; text-align: justify; hyphens: auto; }
   .modal-body p + p { margin-top: 1.1rem; }
+  .modal-body h2 + p, .modal-body h3 + p, .modal-body h4 + p { margin-top: 0; }
+  .modal-body strong { font-weight: 500; color: var(--ink); }
+  .modal-body em { font-style: italic; }
+  .modal-body ul { margin: 0.75rem 0 0.75rem 1.25rem; }
+  .modal-body p + p { margin-top: 1.1rem; }
   .modal-body a { color: var(--ink); border-bottom: 1px solid var(--border); text-decoration: none; transition: border-color 0.2s; }
   .modal-body a:hover { border-color: var(--ink); }
   .modal-divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
@@ -392,8 +397,7 @@ function openModal(i) {
   document.getElementById('modal-cat').style.display = r.categoria ? 'inline' : 'none';
   document.getElementById('modal-read').textContent = rt ? rt + ' di lettura' : '';
   document.getElementById('modal-title').textContent = r.titolo || '';
-  const paras = (r.testo_completo || '').split(/\n+/).filter(p => p.trim());
-  document.getElementById('modal-body').innerHTML = paras.map(p => `<p>${p}</p>`).join('');
+  document.getElementById('modal-body').innerHTML = renderMarkdown(r.testo_completo || '');
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -406,6 +410,85 @@ function closeModal(e, force) {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(null, true); });
+
+
+// MARKDOWN PARSER LEGGERO
+// Supporta: ## titoli, **grassetto**, *corsivo*, * liste, [link](url), ---
+function renderMarkdown(text) {
+  if (!text) return '';
+  const lines = text.split(/\n/);
+  let html = '';
+  let inList = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i];
+
+    // Inline: escaped HTML prima di tutto
+    line = line
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    // Inline: grassetto + corsivo ***testo***
+    line = line.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+    // Inline: grassetto **testo**
+    line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Inline: corsivo *testo* (non liste)
+    line = line.replace(/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+    // Inline: link [testo](url)
+    line = line.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    // Inline: codice `code`
+    line = line.replace(/`([^`]+)`/g, '<code style="font-family:monospace;font-size:0.9em;background:rgba(0,0,0,0.06);padding:0.1em 0.3em;border-radius:3px">$1</code>');
+
+    const trimmed = lines[i].trimStart();
+
+    // Separatore orizzontale ---
+    if (/^---+$/.test(trimmed)) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += '<hr style="border:none;border-top:1px solid var(--border);margin:1.5rem 0">';
+      continue;
+    }
+
+    // Titolo H1 #
+    if (/^# /.test(trimmed)) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<h2 style="font-family:var(--serif);font-size:1.6rem;line-height:1.2;color:var(--ink);margin:1.5rem 0 0.75rem">${line.replace(/^#+ /, '')}</h2>`;
+      continue;
+    }
+    // Titolo H2 ##
+    if (/^## /.test(trimmed)) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<h3 style="font-family:var(--serif);font-size:1.3rem;line-height:1.2;color:var(--ink);margin:1.5rem 0 0.5rem">${line.replace(/^##+ /, '')}</h3>`;
+      continue;
+    }
+    // Titolo H3 ###
+    if (/^### /.test(trimmed)) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<h4 style="font-size:1rem;font-weight:500;color:var(--ink);margin:1.25rem 0 0.4rem;letter-spacing:0.02em">${line.replace(/^###+ /, '')}</h4>`;
+      continue;
+    }
+
+    // Elemento lista * o -
+    if (/^[*-] /.test(trimmed)) {
+      if (!inList) { html += '<ul style="margin:0.75rem 0 0.75rem 1.25rem;display:flex;flex-direction:column;gap:0.3rem">'; inList = true; }
+      html += `<li style="font-size:1rem;font-weight:300;color:var(--ink-muted);line-height:1.75">${line.replace(/^[*-] /, '')}</li>`;
+      continue;
+    }
+
+    // Riga vuota
+    if (trimmed === '') {
+      if (inList) { html += '</ul>'; inList = false; }
+      continue;
+    }
+
+    // Paragrafo normale
+    if (inList) { html += '</ul>'; inList = false; }
+    html += `<p>${line}</p>`;
+  }
+
+  if (inList) html += '</ul>';
+  return html;
+}
 
 function toggleMenu() {
   const btn = document.getElementById('hamburger');
