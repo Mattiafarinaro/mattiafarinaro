@@ -343,7 +343,7 @@ function renderFeatured(r, idx) {
         <div>
           <p class="featured-badge">${r.categoria || 'In evidenza'}</p>
           <h2 class="featured-title">${r.titolo || ''}</h2>
-          <p class="featured-excerpt">${r.estratto || ''}</p>
+          <p class="featured-excerpt">${stripMarkdown(r.estratto || '')}</p>
         </div>
         <div class="featured-meta">
           <div class="featured-meta-left">
@@ -375,7 +375,7 @@ function renderGrid(articles) {
             ${r.categoria ? `<span class="article-card-cat">${r.categoria}</span>` : ''}
           </div>
           <h3 class="article-card-title">${r.titolo || ''}</h3>
-          <p class="article-card-excerpt">${r.estratto || ''}</p>
+          <p class="article-card-excerpt">${stripMarkdown(r.estratto || '')}</p>
         </div>
         ${hasFull || rt ? `<div class="article-card-footer">
           <span class="article-card-read">${rt ? rt + ' di lettura' : ''}</span>
@@ -488,6 +488,23 @@ function renderMarkdown(text) {
 
   if (inList) html += '</ul>';
   return html;
+}
+
+
+// Rimuove la sintassi markdown per le anteprime (card)
+function stripMarkdown(text) {
+  if (!text) return '';
+  return text
+    .replace(/#{1,6} /g, '')          // rimuove # titoli
+    .replace(/\*\*\*(.*?)\*\*\*/g, '$1') // rimuove ***grassetto corsivo***
+    .replace(/\*\*(.*?)\*\*/g, '$1')     // rimuove **grassetto**
+    .replace(/\*(.*?)\*/g, '$1')         // rimuove *corsivo*
+    .replace(/`([^`]+)`/g, '$1')         // rimuove `codice`
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // rimuove [link](url) → testo
+    .replace(/^[*-] /gm, '')            // rimuove * liste
+    .replace(/^---+$/gm, '')            // rimuove ---
+    .replace(/\n+/g, ' ')              // appiattisce newline
+    .trim();
 }
 
 function toggleMenu() {
