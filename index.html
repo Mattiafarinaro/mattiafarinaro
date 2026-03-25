@@ -566,7 +566,7 @@ function renderBlog(rows) {
         <div class="blog-card-content">
           <p class="blog-card-meta">${r.data || ''} ${r.categoria ? '· ' + r.categoria : ''}</p>
           <h3 class="blog-card-title">${r.titolo || ''}</h3>
-          <p class="blog-card-excerpt">${r.estratto || ''}</p>
+          <p class="blog-card-excerpt">${stripMarkdown(r.estratto || '')}</p>
           ${hasFull ? '<p style="font-size:0.8rem;margin-top:1rem;color:var(--ink-faint)">Leggi tutto →</p>' : ''}
         </div>
       </div>`;
@@ -703,6 +703,23 @@ function renderMarkdown(text) {
 
   if (inList) html += '</ul>';
   return html;
+}
+
+
+// Rimuove la sintassi markdown per le anteprime (card)
+function stripMarkdown(text) {
+  if (!text) return '';
+  return text
+    .replace(/#{1,6} /g, '')          // rimuove # titoli
+    .replace(/\*\*\*(.*?)\*\*\*/g, '$1') // rimuove ***grassetto corsivo***
+    .replace(/\*\*(.*?)\*\*/g, '$1')     // rimuove **grassetto**
+    .replace(/\*(.*?)\*/g, '$1')         // rimuove *corsivo*
+    .replace(/`([^`]+)`/g, '$1')         // rimuove `codice`
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // rimuove [link](url) → testo
+    .replace(/^[*-] /gm, '')            // rimuove * liste
+    .replace(/^---+$/gm, '')            // rimuove ---
+    .replace(/\n+/g, ' ')              // appiattisce newline
+    .trim();
 }
 
 // NAV MOBILE
