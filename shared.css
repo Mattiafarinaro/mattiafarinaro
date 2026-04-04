@@ -1,0 +1,108 @@
+/* shared.css — stili condivisi tra index.html e pensieri.html */
+
+/* ── RESET & TOKENS ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f5f0;--surface:#fff;--ink:#111;--ink-muted:#6b6b6b;--ink-faint:#b0afa8;
+  --border:rgba(0,0,0,.1);--border-strong:rgba(0,0,0,.2);
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --nav-h:64px;--r:2px;--t:.2s ease;
+  --max-w:1100px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:100vh;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+/* ACCESSIBILITY */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+.skip-link{position:absolute;top:-100%;left:1rem;background:var(--ink);color:#fff;padding:.5rem 1rem;font-size:.875rem;font-weight:500;z-index:9999;text-decoration:none;border-radius:0 0 4px 4px;transition:top .2s}
+.skip-link:focus{top:0}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:2px}
+
+/* ── HEADER / NAV ── */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:160;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;background:rgba(247,245,240,.93);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--serif);font-size:1.1rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em;transition:opacity var(--t)}
+.nav-logo:hover{opacity:.65}
+.nav-links{display:flex;gap:.15rem;list-style:none}
+.nav-links a{display:inline-block;font-size:.8rem;font-weight:400;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-muted);text-decoration:none;padding:.4rem .75rem;border-radius:3px;transition:color var(--t),background var(--t)}
+.nav-links a:hover{color:var(--ink);background:rgba(0,0,0,.05)}
+.nav-links a[aria-current=page]{color:var(--ink);font-weight:500}
+
+/* HAMBURGER */
+.nav-hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:44px;background:none;border:none;cursor:pointer;padding:0;z-index:200;position:relative;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+.nav-hamburger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:transform .25s,opacity .25s;transform-origin:center}
+.nav-hamburger[aria-expanded=true] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.nav-hamburger[aria-expanded=true] span:nth-child(2){opacity:0;transform:scaleX(0)}
+.nav-hamburger[aria-expanded=true] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* MOBILE NAV OVERLAY */
+.nav-mobile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;position:fixed;inset:0;z-index:150;background:rgba(247,245,240,.98);backdrop-filter:blur(16px);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;pointer-events:none}
+.nav-mobile.open{opacity:1;visibility:visible;pointer-events:auto}
+.nav-mobile a{font-family:var(--serif);font-size:2rem;color:var(--ink);text-decoration:none;transition:opacity var(--t)}
+.nav-mobile a:hover{opacity:.45}
+
+/* ── BUTTONS ── */
+.btn-primary{display:inline-flex;align-items:center;gap:.6rem;font-size:.85rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--ink);text-decoration:none;padding:.75rem 1.5rem;border-radius:var(--r);transition:background var(--t),transform var(--t);border:none;cursor:pointer}
+.btn-primary:hover{background:#333;transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+.btn-ghost{display:inline-flex;align-items:center;gap:.6rem;font-size:.85rem;font-weight:400;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;padding:.75rem 1.5rem;border-radius:var(--r);border:1.5px solid var(--ink);transition:background var(--t),color var(--t),transform var(--t)}
+.btn-ghost:hover{background:var(--ink);color:#fff;transform:translateY(-1px)}
+.btn-ghost:active{transform:translateY(0)}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.65);align-items:flex-start;justify-content:center;padding:2rem;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--surface);max-width:720px;width:100%;margin:auto;position:relative;overflow:hidden;border-radius:2px;box-shadow:0 24px 80px rgba(0,0,0,.25)}
+.modal-close{position:absolute;top:1rem;right:1rem;font-size:1.3rem;background:rgba(0,0,0,.55);border:none;cursor:pointer;color:#fff;width:36px;height:36px;display:flex;align-items:center;justify-content:center;z-index:10;border-radius:50%;transition:background var(--t)}
+.modal-close:hover{background:rgba(0,0,0,.85)}
+.modal-hero-img,.modal-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;filter:grayscale(55%)}
+.modal-inner{padding:2.5rem 3rem 3rem}
+.modal-meta-row{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:1rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.modal-meta-cat{background:var(--bg);padding:.2rem .6rem;color:var(--ink-muted);border-radius:2px;border:1px solid var(--border)}
+.modal-title{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.2rem);line-height:1.15;color:var(--ink);margin-bottom:1.75rem}
+.modal-divider{border:none;border-top:1px solid var(--border);margin:0 0 1.75rem}
+.modal-body{font-size:1rem;font-weight:300;color:var(--ink-muted);line-height:1.85;text-align:justify;hyphens:auto}
+.modal-body p+p{margin-top:1rem}
+.modal-body h2{font-family:var(--serif);font-size:1.4rem;line-height:1.2;color:var(--ink);margin:1.5rem 0 .75rem}
+.modal-body h3{font-family:var(--serif);font-size:1.15rem;color:var(--ink);margin:1.25rem 0 .5rem}
+.modal-body h4{font-size:1rem;font-weight:500;color:var(--ink);margin:1.1rem 0 .4rem}
+.modal-body strong{font-weight:500;color:var(--ink)}
+.modal-body em{font-style:italic}
+.modal-body ul{margin:.75rem 0 .75rem 1.5rem;display:flex;flex-direction:column;gap:.3rem}
+.modal-body li{line-height:1.7}
+.modal-body blockquote{border-left:3px solid var(--border-strong);padding:.5rem 1rem;margin:.75rem 0;font-style:italic;color:var(--ink-muted)}
+.modal-body hr{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+.modal-body code{font-family:monospace;font-size:.9em;background:rgba(0,0,0,.06);padding:.1em .35em;border-radius:3px}
+.modal-body a{color:var(--ink);border-bottom:1px solid var(--border);text-decoration:none;transition:border-color var(--t)}
+.modal-body a:hover{border-color:var(--ink)}
+
+/* SHARE BAR */
+.share-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:1.25rem 0 0;border-top:1px solid var(--border);margin-top:2rem}
+.share-label{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-right:.25rem}
+.share-btn{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--sans);font-size:.78rem;font-weight:400;letter-spacing:.04em;color:var(--ink-muted);background:none;border:1px solid var(--border);border-radius:var(--r);padding:.4rem .85rem;cursor:pointer;text-decoration:none;transition:color var(--t),border-color var(--t),background var(--t)}
+.share-btn:hover{color:var(--ink);border-color:var(--border-strong);background:rgba(0,0,0,.03)}
+.share-btn svg{flex-shrink:0}
+
+/* ── FOOTER ── */
+.site-footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.08);padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.site-footer p{font-size:.78rem;color:rgba(255,255,255,.35)}
+.site-footer-nav{display:flex;gap:1.5rem}
+.site-footer-nav a{font-size:.78rem;color:rgba(255,255,255,.4);text-decoration:none;letter-spacing:.05em;transition:color var(--t)}
+.site-footer-nav a:hover{color:rgba(255,255,255,.8)}
+
+/* ── BLOG CARDS (usate in entrambe le pagine) ── */
+.blog-card-img,.article-card-img,.featured-img{filter:grayscale(75%);transition:filter .4s ease}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .site-header{padding:0 1.5rem}
+  .nav-links{display:none}
+  .nav-hamburger{display:flex}
+  .modal-inner{padding:2rem 1.5rem}
+  .modal-overlay{padding:0;align-items:flex-end}
+  .modal-box{border-radius:0;max-width:100%}
+  .site-footer{flex-direction:column;text-align:center}
+}
