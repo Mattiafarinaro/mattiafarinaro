@@ -279,12 +279,12 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:10
   </div>
 </section>
 
-<section class="section" id="about" aria-labelledby="about-heading">
+<section class="section" id="about" aria-labelledby="about-hl">
   <div class="section-inner">
     <p class="section-eyebrow" aria-hidden="true">Chi sono</p>
     <div class="about-grid">
       <div>
-        <h2 class="about-headline" id="about-heading about-hl">Radici nel territorio,<br>sguardo sui giovani e sulla cultura.</h2>
+        <h2 class="about-headline" id="about-hl">Radici nel territorio,<br>sguardo sui giovani e sulla cultura.</h2>
         <div class="about-body" id="about-body" aria-live="polite">
           <p>Lavoro al servizio delle istituzioni con un impegno costante verso le politiche educative, culturali e sociali del territorio trentino.</p>
           <p>Credo nel valore della cultura come strumento di crescita collettiva, nella centralità dei giovani come protagonisti del futuro, e nell'importanza di costruire una società più equa e inclusiva.</p>
@@ -536,21 +536,24 @@ function closeModal(e,force){
   }
 }
 
-/* FORM — configura su formspree.io e sostituisci YOUR_FORM_ID */
+/* FORM — registrati su formspree.io, crea un form e sostituisci YOUR_FORM_ID */
 const FORMSPREE_ID='YOUR_FORM_ID';
-document.getElementById('contact-form').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const btn=document.getElementById('form-submit');
-  const status=document.getElementById('form-status');
-  btn.disabled=true;btn.textContent='Invio…';
-  status.className='form-status';
-  try{
-    const res=await fetch(`https://formspree.io/f/${FORMSPREE_ID}`,{method:'POST',body:new FormData(e.target),headers:{Accept:'application/json'}});
-    if(res.ok){status.className='form-status success';status.textContent='Messaggio inviato! Ti rispondo presto.';e.target.reset();}
-    else throw new Error();
-  }catch{status.className='form-status error';status.textContent='Errore nell\'invio. Scrivimi direttamente via email.';}
-  btn.disabled=false;btn.innerHTML='Invia messaggio <span aria-hidden="true">→</span>';
-});
+const contactForm=document.getElementById('contact-form');
+if(contactForm){
+  contactForm.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const btn=document.getElementById('form-submit');
+    const status=document.getElementById('form-status');
+    btn.disabled=true;btn.textContent='Invio…';
+    status.className='form-status';
+    try{
+      const res=await fetch(`https://formspree.io/f/${FORMSPREE_ID}`,{method:'POST',body:new FormData(e.target),headers:{Accept:'application/json'}});
+      if(res.ok){status.className='form-status success';status.textContent='Messaggio inviato! Ti rispondo presto.';e.target.reset();}
+      else throw new Error('server');
+    }catch{status.className='form-status error';status.textContent='Errore nell\'invio. Scrivimi direttamente via email.';}
+    btn.disabled=false;btn.innerHTML='Invia messaggio <span aria-hidden="true">→</span>';
+  });
+}
 
 /* NAV MOBILE */
 function toggleMenu(){
