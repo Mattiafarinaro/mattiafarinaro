@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Questi meta vengono sovrascritti dal JS prima che il redirect avvenga.
+     I crawler social (LinkedIn, WhatsApp, Twitter) leggono questi tag statici,
+     poi il JS aggiorna e reindirizza l'utente alla pagina reale. -->
+<title id="page-title">Articolo — Mattia Farinaro</title>
+<meta id="meta-desc" name="description" content="Leggi questo articolo sul sito di Mattia Farinaro.">
+
+<meta id="og-type"        property="og:type"        content="article">
+<meta id="og-url"         property="og:url"         content="https://mattiafarinaro.github.io/articolo.html">
+<meta id="og-title"       property="og:title"       content="Articolo — Mattia Farinaro">
+<meta id="og-desc"        property="og:description" content="Leggi questo articolo sul sito di Mattia Farinaro.">
+<meta id="og-image"       property="og:image"       content="https://mattiafarinaro.github.io/foto.jpg">
+<meta id="og-image-w"     property="og:image:width"  content="1200">
+<meta id="og-image-h"     property="og:image:height" content="630">
+<meta                     property="og:locale"      content="it_IT">
+<meta                     property="og:site_name"   content="Mattia Farinaro">
+
+<meta id="tw-card"   name="twitter:card"        content="summary_large_image">
+<meta id="tw-title"  name="twitter:title"       content="Articolo — Mattia Farinaro">
+<meta id="tw-desc"   name="twitter:description" content="Leggi questo articolo sul sito di Mattia Farinaro.">
+<meta id="tw-image"  name="twitter:image"       content="https://mattiafarinaro.github.io/foto.jpg">
+
+<meta id="meta-author" name="author" content="Mattia Farinaro">
+
+<style>
+  body{font-family:system-ui,sans-serif;background:#f7f5f0;color:#111;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
+  .loading{text-align:center;padding:2rem}
+  .loading p{font-size:.9rem;color:#6b6b6b;margin-top:.75rem}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#111;animation:bounce .9s infinite;margin:0 3px}
+  .dot:nth-child(2){animation-delay:.15s}
+  .dot:nth-child(3){animation-delay:.3s}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
+</style>
+</head>
+<body>
+<div class="loading">
+  <div><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+  <p>Apertura articolo…</p>
+</div>
+
+<script>
+const SHEET_ID = '2PACX-1vS9e2zmWZkr0CJ4PZR65tYOUOkJK7uYPpmHtfRl9LW69muNpulG27o0Ui8nS0jdOjorRNVypcGW3Iv5';
+const GID_BLOG = '1088622999';
+const BASE = 'https://mattiafarinaro.github.io';
+
+function parseCSV(text) {
+  const raw = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+  const cells=[]; let cur='',inQ=false,i=0;
+  while(i<raw.length){const c=raw[i];if(c==='"'){if(inQ&&raw[i+1]==='"'){cur+='"';i+=2;continue;}inQ=!inQ;i++;continue;}if(c===','&&!inQ){cells.push(cur);cur='';i++;continue;}if(c==='\n'&&!inQ){cells.push(cur);cells.push('\n');cur='';i++;continue;}cur+=c;i++;}
+  cells.push(cur);
+  const allRows=[[]];cells.forEach(c=>{if(c==='\n')allRows.push([]);else allRows[allRows.length-1].push(c);});
+  const headers=allRows[0].map(h=>h.trim()),rows=[];
+  for(let r=1;r<allRows.length;r++){const v=allRows[r];if(!v.length||v.every(x=>!x.trim()))continue;const o={};headers.forEach((h,i)=>{o[h]=(v[i]||'').trim();});rows.push(o);}
+  return rows;
+}
+
+function slugify(str) {
+  return (str||'').toLowerCase()
+    .replace(/[àáâ]/g,'a').replace(/[èéê]/g,'e').replace(/[ìíî]/g,'i')
+    .replace(/[òóô]/g,'o').replace(/[ùúû]/g,'u')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60);
+}
+
+function setMeta(id, attr, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.setAttribute(attr, val);
+}
+
+function getFoto(r) {
+  const k = Object.keys(r).find(k => k.toLowerCase().includes('foto')) || 'foto';
+  return r[k] || '';
+}
+
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const slug   = params.get('a');
+  const dest   = slug ? `${BASE}/pensieri.html?a=${encodeURIComponent(slug)}` : `${BASE}/pensieri.html`;
+
+  if (!slug) { window.location.replace(dest); return; }
+
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=${GID_BLOG}&single=true&output=csv`;
+    const res  = await fetch(url);
+    const rows = parseCSV(await res.text());
+
+    const pk   = Object.keys(rows[0]||{}).find(k=>k.toLowerCase().includes('pubblicato'))||'pubblicato';
+    const art  = rows.filter(r=>(r[pk]||'').trim().toUpperCase()==='SI')
+                     .find(r => slugify(r.titolo) === slug);
+
+    if (art) {
+      const title  = art.titolo || 'Articolo — Mattia Farinaro';
+      const desc   = (art.estratto || 'Leggi questo articolo sul sito di Mattia Farinaro.').replace(/\*\*?|#+/g,'').trim().slice(0,200);
+      const foto   = getFoto(art);
+      const imgUrl = foto || `${BASE}/foto.jpg`;
+      const pageUrl = `${BASE}/articolo.html?a=${encodeURIComponent(slug)}`;
+
+      // Update all meta tags
+      document.getElementById('page-title').textContent = `${title} — Mattia Farinaro`;
+      setMeta('meta-desc',  'content', desc);
+      setMeta('og-url',     'content', pageUrl);
+      setMeta('og-title',   'content', `${title} — Mattia Farinaro`);
+      setMeta('og-desc',    'content', desc);
+      setMeta('og-image',   'content', imgUrl);
+      setMeta('tw-title',   'content', `${title} — Mattia Farinaro`);
+      setMeta('tw-desc',    'content', desc);
+      setMeta('tw-image',   'content', imgUrl);
+    }
+  } catch(e) {
+    console.warn('articolo.html: fetch failed, redirecting anyway', e);
+  }
+
+  // Redirect to pensieri.html with the slug — article auto-opens via URL
+  window.location.replace(dest);
+}
+
+init();
+</script>
+</body>
+</html>
