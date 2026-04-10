@@ -84,11 +84,20 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:10
 .share-btn svg{flex-shrink:0}
 
 /* ── FOOTER ── */
-.site-footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.08);padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
-.site-footer p{font-size:.78rem;color:rgba(255,255,255,.35)}
-.site-footer-nav{display:flex;gap:1.5rem}
-.site-footer-nav a{font-size:.78rem;color:rgba(255,255,255,.4);text-decoration:none;letter-spacing:.05em;transition:color var(--t)}
-.site-footer-nav a:hover{color:rgba(255,255,255,.8)}
+.site-footer{background:var(--ink);padding:4rem 2.5rem 2.5rem}
+.site-footer-inner{max-width:var(--max-w);margin:0 auto;display:grid;grid-template-columns:1.2fr 2fr;gap:4rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.site-footer-brand{}
+.site-footer-logo{font-family:var(--serif);font-size:1.3rem;color:#fff;text-decoration:none;letter-spacing:-.01em;display:inline-block;margin-bottom:.75rem;transition:opacity var(--t)}
+.site-footer-logo:hover{opacity:.7}
+.site-footer-tagline{font-size:.85rem;font-weight:300;color:rgba(255,255,255,.4);line-height:1.6;max-width:26ch}
+.site-footer-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.site-footer-col-title{font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem}
+.site-footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.site-footer-col a{font-size:.88rem;font-weight:300;color:rgba(255,255,255,.55);text-decoration:none;transition:color var(--t)}
+.site-footer-col a:hover{color:#fff}
+.site-footer-bottom{max-width:var(--max-w);margin:0 auto;padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.site-footer-copy{font-size:.75rem;color:rgba(255,255,255,.25)}
+.site-footer-made{font-size:.75rem;color:rgba(255,255,255,.2)}
 
 /* ── BLOG CARDS (usate in entrambe le pagine) ── */
 .blog-card-img,.article-card-img,.featured-img{filter:grayscale(75%);transition:filter .4s ease}
@@ -104,5 +113,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:10
   .modal-inner{padding:2rem 1.5rem}
   .modal-overlay{padding:0;align-items:flex-end}
   .modal-box{border-radius:0;max-width:100%}
-  .site-footer{flex-direction:column;text-align:center}
+  .site-footer{padding:3rem 1.5rem 2rem}
+  .site-footer-inner{grid-template-columns:1fr;gap:2.5rem;padding-bottom:2rem}
+  .site-footer-cols{grid-template-columns:repeat(2,1fr);gap:1.5rem}
+  .site-footer-bottom{flex-direction:column;text-align:center;gap:.5rem}
 }
